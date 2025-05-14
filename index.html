@@ -1,0 +1,836 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FinTools Pro - Financial SaaS Solution</title>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        :root {
+            --primary: #4361ee;
+            --secondary: #3f37c9;
+            --accent: #4895ef;
+            --light: #f8f9fa;
+            --dark: #212529;
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        body {
+            background-color: var(--light);
+            color: var(--dark);
+            line-height: 1.6;
+        }
+        
+        header {
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            color: white;
+            padding: 2rem 0;
+            text-align: center;
+            position: relative;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+        
+        h1 {
+            font-size: 2.5rem;
+            margin-bottom: 1rem;
+        }
+        
+        .subtitle {
+            font-size: 1.2rem;
+            opacity: 0.9;
+            margin-bottom: 2rem;
+        }
+        
+        .cta-button {
+            display: inline-block;
+            background-color: white;
+            color: var(--primary);
+            padding: 12px 30px;
+            border-radius: 50px;
+            text-decoration: none;
+            font-weight: bold;
+            margin: 1rem 0;
+            transition: all 0.3s ease;
+            border: none;
+            cursor: pointer;
+        }
+        
+        .cta-button:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 10px 20px rgba(0,0,0,0.1);
+        }
+        
+        /* Language Switcher Styles */
+        .language-switcher {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+        }
+        
+        #langSwitch {
+            padding: 6px 10px;
+            border-radius: 4px;
+            border: 1px solid rgba(255,255,255,0.3);
+            background-color: rgba(255,255,255,0.2);
+            color: white;
+            cursor: pointer;
+        }
+        
+        #langSwitch option {
+            color: var(--dark);
+        }
+        
+        .features-section {
+            padding: 4rem 0;
+        }
+        
+        .section-title {
+            text-align: center;
+            margin-bottom: 3rem;
+            font-size: 2rem;
+            color: var(--secondary);
+        }
+        
+        .features-container {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 2rem;
+            justify-content: center;
+        }
+        
+        .feature-column {
+            flex: 1;
+            min-width: 300px;
+            max-width: 350px;
+            background: white;
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+            transition: all 0.3s ease;
+            position: relative;
+        }
+        
+        .feature-column:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 15px 30px rgba(0,0,0,0.15);
+        }
+        
+        .feature-header {
+            background: linear-gradient(135deg, var(--accent), var(--primary));
+            color: white;
+            padding: 1.5rem;
+            text-align: center;
+        }
+        
+        .feature-content {
+            padding: 1.5rem;
+        }
+        
+        .feature-title {
+            font-size: 1.5rem;
+            margin-bottom: 1rem;
+            color: var(--secondary);
+        }
+        
+        .feature-description {
+            margin-bottom: 1.5rem;
+            color: #555;
+        }
+        
+        .tool-container {
+            margin-bottom: 1.5rem;
+            border-left: 3px solid var(--accent);
+            padding-left: 10px;
+            transition: all 0.3s ease;
+        }
+        
+        .tool-container:hover {
+            border-left-width: 6px;
+            padding-left: 15px;
+        }
+        
+        .tool-title {
+            font-weight: bold;
+            margin-bottom: 0.5rem;
+            color: var(--dark);
+        }
+        
+        .tool-description {
+            font-size: 0.9rem;
+            color: #666;
+        }
+        
+        .calculator-form {
+            margin-top: 1rem;
+        }
+        
+        .calculator-form label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-weight: 500;
+        }
+        
+        .calculator-form input, 
+        .calculator-form select {
+            width: 100%;
+            padding: 8px;
+            margin-bottom: 1rem;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+        }
+        
+        .calculator-form button {
+            width: 100%;
+            padding: 10px;
+            background-color: var(--primary);
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-weight: bold;
+            transition: background-color 0.3s;
+        }
+        
+        .calculator-form button:hover {
+            background-color: var(--secondary);
+        }
+        
+        .calculator-result {
+            margin-top: 1rem;
+            padding: 10px;
+            background-color: #f8f9fa;
+            border-radius: 4px;
+            font-weight: bold;
+            white-space: pre-line;
+        }
+        
+        .slider-container {
+            width: 100%;
+            overflow: hidden;
+            position: relative;
+            height: 400px;
+            margin: 2rem 0;
+            border-radius: 10px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+        }
+        
+        .slider {
+            display: flex;
+            transition: transform 0.5s ease;
+            height: 100%;
+        }
+        
+        .slide {
+            min-width: 100%;
+            height: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background-color: white;
+            padding: 2rem;
+        }
+        
+        .slide-content {
+            max-width: 800px;
+            width: 100%;
+            text-align: center;
+        }
+        
+        .slider-nav {
+            position: absolute;
+            bottom: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            display: flex;
+            gap: 10px;
+        }
+        
+        .slider-dot {
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            background-color: rgba(255,255,255,0.5);
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+        
+        .slider-dot.active {
+            background-color: white;
+        }
+        
+        .pricing-section {
+            padding: 4rem 0;
+            background-color: #f1f3ff;
+        }
+        
+        .pricing-cards {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 2rem;
+            justify-content: center;
+        }
+        
+        .pricing-card {
+            background: white;
+            border-radius: 10px;
+            padding: 2rem;
+            flex: 1;
+            min-width: 300px;
+            max-width: 350px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+            transition: all 0.3s ease;
+        }
+        
+        .pricing-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 15px 30px rgba(0,0,0,0.15);
+        }
+        
+        .pricing-title {
+            font-size: 1.5rem;
+            margin-bottom: 1rem;
+            color: var(--secondary);
+        }
+        
+        .price {
+            font-size: 2.5rem;
+            font-weight: bold;
+            margin-bottom: 1.5rem;
+            color: var(--primary);
+        }
+        
+        .price span {
+            font-size: 1rem;
+            color: #666;
+        }
+        
+        .pricing-features {
+            list-style: none;
+            margin-bottom: 2rem;
+        }
+        
+        .pricing-features li {
+            margin-bottom: 0.8rem;
+            position: relative;
+            padding-left: 25px;
+        }
+        
+        .pricing-features li:before {
+            content: "✓";
+            color: var(--accent);
+            position: absolute;
+            left: 0;
+            font-weight: bold;
+        }
+        
+        footer {
+            background-color: var(--dark);
+            color: white;
+            padding: 3rem 0;
+            text-align: center;
+        }
+        
+        .footer-links {
+            display: flex;
+            justify-content: center;
+            gap: 2rem;
+            margin: 2rem 0;
+        }
+        
+        .footer-links a {
+            color: white;
+            text-decoration: none;
+            transition: color 0.3s ease;
+        }
+        
+        .footer-links a:hover {
+            color: var(--accent);
+        }
+        
+        @media (max-width: 768px) {
+            .features-container, .pricing-cards {
+                flex-direction: column;
+                align-items: center;
+            }
+            
+            .feature-column, .pricing-card {
+                max-width: 100%;
+            }
+            
+            .slider-container {
+                height: auto;
+                min-height: 400px;
+            }
+            
+            .language-switcher {
+                position: static;
+                text-align: center;
+                margin-bottom: 1rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="language-switcher">
+            <select id="langSwitch" onchange="changeLanguage()">
+                <option value="en">English</option>
+                <option value="fr">Français</option>
+            </select>
+        </div>
+        <div class="container">
+            <h1>FinTools Pro</h1>
+            <p class="subtitle">Your all-in-one financial calculation SaaS platform</p>
+            <a href="#pricing" class="cta-button">Get Started Today</a>
+        </div>
+    </header>
+    
+    <section class="features-section">
+        <div class="container">
+            <h2 class="section-title">Powerful Financial Tools</h2>
+            <div class="features-container">
+                <!-- Feature Column 1 -->
+                <div class="feature-column">
+                    <div class="feature-header">
+                        <h3 class="feature-title">Retail Pricing Tools</h3>
+                    </div>
+                    <div class="feature-content">
+                        <div class="tool-container">
+                            <h4 class="tool-title">Price by Weight Calculator</h4>
+                            <p class="tool-description">Calculate exact prices based on weight including VAT automatically.</p>
+                            <div class="calculator-form">
+                                <label for="pricePerKg">Price per kilo (€):</label>
+                                <input type="number" id="pricePerKg" step="0.01" placeholder="2.00">
+                                <label for="weightGrams">Weight (grams):</label>
+                                <input type="number" id="weightGrams" placeholder="200">
+                                <button onclick="calculatePriceByWeight()">Calculate Price</button>
+                                <div class="calculator-result" id="weightResult"></div>
+                            </div>
+                        </div>
+                        <div class="tool-container">
+                            <h4 class="tool-title">Bulk Discount Calculator</h4>
+                            <p class="tool-description">Determine optimal pricing for bulk purchases with tiered discounts.</p>
+                        </div>
+                        <div class="tool-container">
+                            <h4 class="tool-title">Margin Calculator</h4>
+                            <p class="tool-description">Calculate your profit margins based on cost and selling price.</p>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Feature Column 2 -->
+                <div class="feature-column">
+                    <div class="feature-header">
+                        <h3 class="feature-title">Investment Tools</h3>
+                    </div>
+                    <div class="feature-content">
+                        <div class="tool-container">
+                            <h4 class="tool-title">Compound Interest Calculator</h4>
+                            <p class="tool-description">Project your investment growth with daily, monthly, or annual compounding.</p>
+                            <div class="calculator-form">
+                                <label for="capital">Initial Amount (€):</label>
+                                <input type="number" id="capital" placeholder="10000">
+                                <label for="interestRate">Interest Rate (%):</label>
+                                <input type="number" id="interestRate" step="0.01" placeholder="2">
+                                <label for="duration">Duration (years):</label>
+                                <input type="number" id="duration" placeholder="5">
+                                <label for="frequency">Frequency:</label>
+                                <select id="frequency">
+                                    <option value="365">Daily</option>
+                                    <option value="12">Monthly</option>
+                                    <option value="1" selected>Annually</option>
+                                </select>
+                                <button onclick="calculateCompoundInterest()">Calculate</button>
+                                <div class="calculator-result" id="interestResult"></div>
+                            </div>
+                        </div>
+                        <div class="tool-container">
+                            <h4 class="tool-title">ROI Calculator</h4>
+                            <p class="tool-description">Calculate return on investment for any project or asset.</p>
+                        </div>
+                        <div class="tool-container">
+                            <h4 class="tool-title">Loan Amortization</h4>
+                            <p class="tool-description">Generate complete payment schedules for loans and mortgages.</p>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Feature Column 3 -->
+                <div class="feature-column">
+                    <div class="feature-header">
+                        <h3 class="feature-title">Tax & Compliance</h3>
+                    </div>
+                    <div class="feature-content">
+                        <div class="tool-container">
+                            <h4 class="tool-title">Taxable Value Calculator</h4>
+                            <p class="tool-description">Determine accurate taxable amounts with depreciation calculations.</p>
+                            <div class="calculator-form">
+                                <label for="productName">Product Name:</label>
+                                <input type="text" id="productName" placeholder="Product">
+                                <label for="productPrice">Original Value (€):</label>
+                                <input type="number" id="productPrice" step="0.01" placeholder="1000">
+                                <label for="purchaseDate">Purchase Date:</label>
+                                <input type="date" id="purchaseDate">
+                                <button onclick="calculateTaxableValue()">Calculate</button>
+                                <div class="calculator-result" id="taxResult"></div>
+                            </div>
+                        </div>
+                        <div class="tool-container">
+                            <h4 class="tool-title">VAT/GST Calculator</h4>
+                            <p class="tool-description">Quickly add or remove VAT/GST from any amount.</p>
+                        </div>
+                        <div class="tool-container">
+                            <h4 class="tool-title">Deduction Finder</h4>
+                            <p class="tool-description">Identify all possible tax deductions for your business.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    
+    <section class="slider-section">
+        <div class="container">
+            <div class="slider-container">
+                <div class="slider">
+                    <!-- Slide 1: Price by Weight -->
+                    <div class="slide">
+                        <div class="slide-content">
+                            <h2>Price by Weight Calculator</h2>
+                            <p>Enter price per kilo and weight in grams to get the exact price including VAT.</p>
+                            <div class="calculator-form" style="max-width: 400px; margin: 2rem auto;">
+                                <label for="sliderPricePerKg">Price per kilo (€):</label>
+                                <input type="number" id="sliderPricePerKg" step="0.01" placeholder="2.00">
+                                <label for="sliderWeightGrams">Weight (grams):</label>
+                                <input type="number" id="sliderWeightGrams" placeholder="200">
+                                <button onclick="calculateSliderPriceByWeight()">Calculate</button>
+                                <div class="calculator-result" id="sliderWeightResult" style="margin-top: 1rem;"></div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Slide 2: Compound Interest -->
+                    <div class="slide">
+                        <div class="slide-content">
+                            <h2>Compound Interest Calculator</h2>
+                            <p>See how your investments grow over time with compound interest.</p>
+                            <div class="calculator-form" style="max-width: 400px; margin: 2rem auto;">
+                                <label for="sliderCapital">Initial Amount (€):</label>
+                                <input type="number" id="sliderCapital" placeholder="10000">
+                                <label for="sliderInterestRate">Interest Rate (%):</label>
+                                <input type="number" id="sliderInterestRate" step="0.01" placeholder="2">
+                                <label for="sliderDuration">Duration (years):</label>
+                                <input type="number" id="sliderDuration" placeholder="5">
+                                <button onclick="calculateSliderCompoundInterest()">Calculate</button>
+                                <div class="calculator-result" id="sliderInterestResult" style="margin-top: 1rem;"></div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Slide 3: Taxable Value -->
+                    <div class="slide">
+                        <div class="slide-content">
+                            <h2>Taxable Value Calculator</h2>
+                            <p>Calculate the taxable value of assets including depreciation.</p>
+                            <div class="calculator-form" style="max-width: 400px; margin: 2rem auto;">
+                                <label for="sliderProductName">Product Name:</label>
+                                <input type="text" id="sliderProductName" placeholder="Product">
+                                <label for="sliderProductPrice">Original Value (€):</label>
+                                <input type="number" id="sliderProductPrice" step="0.01" placeholder="1000">
+                                <label for="sliderPurchaseDate">Purchase Date:</label>
+                                <input type="date" id="sliderPurchaseDate">
+                                <button onclick="calculateSliderTaxableValue()">Calculate</button>
+                                <div class="calculator-result" id="sliderTaxResult" style="margin-top: 1rem;"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="slider-nav">
+                    <div class="slider-dot active" onclick="goToSlide(0)"></div>
+                    <div class="slider-dot" onclick="goToSlide(1)"></div>
+                    <div class="slider-dot" onclick="goToSlide(2)"></div>
+                </div>
+            </div>
+        </div>
+    </section>
+    
+    <section class="pricing-section" id="pricing">
+        <div class="container">
+            <h2 class="section-title">Simple, Transparent Pricing</h2>
+            <div class="pricing-cards">
+                <div class="pricing-card">
+                    <h3 class="pricing-title">Starter</h3>
+                    <div class="price">€9<span>/month</span></div>
+                    <ul class="pricing-features">
+                        <li>Basic financial calculators</li>
+                        <li>5 calculations per day</li>
+                        <li>Email support</li>
+                        <li>Standard reports</li>
+                    </ul>
+                    <button class="cta-button">Start Free Trial</button>
+                </div>
+                <div class="pricing-card" style="border: 2px solid var(--accent);">
+                    <h3 class="pricing-title">Professional</h3>
+                    <div class="price">€29<span>/month</span></div>
+                    <ul class="pricing-features">
+                        <li>All financial tools</li>
+                        <li>Unlimited calculations</li>
+                        <li>Priority support</li>
+                        <li>Advanced reports</li>
+                        <li>API access</li>
+                    </ul>
+                    <button class="cta-button" style="background: var(--accent); color: white;">Most Popular</button>
+                </div>
+                <div class="pricing-card">
+                    <h3 class="pricing-title">Enterprise</h3>
+                    <div class="price">€99<span>/month</span></div>
+                    <ul class="pricing-features">
+                        <li>All Professional features</li>
+                        <li>White-label solutions</li>
+                        <li>Dedicated account manager</li>
+                        <li>Custom integrations</li>
+                        <li>On-premise deployment</li>
+                    </ul>
+                    <button class="cta-button">Contact Sales</button>
+                </div>
+            </div>
+        </div>
+    </section>
+    
+    <footer>
+        <div class="container">
+            <h2>FinTools Pro</h2>
+            <p>Your complete financial toolkit in the cloud</p>
+            <div class="footer-links">
+                <a href="#">About</a>
+                <a href="#">Features</a>
+                <a href="#">Pricing</a>
+                <a href="#">Contact</a>
+                <a href="#">Privacy Policy</a>
+            </div>
+            <p>&copy; 2023 FinTools Pro. All rights reserved.</p>
+        </div>
+    </footer>
+    
+    <script>
+        // Calculator Functions
+        function calculatePriceByWeight() {
+            const pricePerKg = parseFloat(document.getElementById('pricePerKg').value);
+            const weightGrams = parseFloat(document.getElementById('weightGrams').value);
+            
+            if (isNaN(pricePerKg) || isNaN(weightGrams)) {
+                document.getElementById('weightResult').innerText = "Please enter valid values";
+                return;
+            }
+            
+            const price = (pricePerKg * (weightGrams / 1000)) * 1.20; // Including 20% VAT
+            document.getElementById('weightResult').innerText = `Price to pay (incl. VAT): €${price.toFixed(2)}`;
+        }
+        
+        function calculateCompoundInterest() {
+            const capital = parseFloat(document.getElementById('capital').value);
+            const interestRate = parseFloat(document.getElementById('interestRate').value);
+            const duration = parseInt(document.getElementById('duration').value);
+            const frequency = parseInt(document.getElementById('frequency').value);
+            
+            if (isNaN(capital) || isNaN(interestRate) || isNaN(duration)) {
+                document.getElementById('interestResult').innerText = "Please enter valid values";
+                return;
+            }
+            
+            const rate = interestRate / 100;
+            const periods = duration * frequency;
+            const finalAmount = capital * Math.pow(1 + rate / frequency, periods);
+            const interest = finalAmount - capital;
+            
+            document.getElementById('interestResult').innerText = 
+                `Final Amount: €${finalAmount.toFixed(2)}\nInterest Earned: €${interest.toFixed(2)}`;
+        }
+        
+        function calculateTaxableValue() {
+            const productName = document.getElementById('productName').value;
+            const productPrice = parseFloat(document.getElementById('productPrice').value);
+            const purchaseDate = new Date(document.getElementById('purchaseDate').value);
+            
+            if (isNaN(productPrice)) {
+                document.getElementById('taxResult').innerText = "Please enter a valid price";
+                return;
+            }
+            
+            const today = new Date();
+            const diffDays = Math.floor((today - purchaseDate) / (1000 * 60 * 60 * 24));
+            let depreciation = 0;
+            if (diffDays >= 365) depreciation = 0.20; // 20% depreciation per year
+            const taxableAmount = productPrice * (1 - depreciation);
+            
+            document.getElementById('taxResult').innerText = 
+                `Product: ${productName}\nTaxable Value: €${taxableAmount.toFixed(2)}`;
+        }
+        
+        // Slider Calculator Functions
+        function calculateSliderPriceByWeight() {
+            const pricePerKg = parseFloat(document.getElementById('sliderPricePerKg').value);
+            const weightGrams = parseFloat(document.getElementById('sliderWeightGrams').value);
+            
+            if (isNaN(pricePerKg) || isNaN(weightGrams)) {
+                document.getElementById('sliderWeightResult').innerText = "Please enter valid values";
+                return;
+            }
+            
+            const price = (pricePerKg * (weightGrams / 1000)) * 1.20;
+            document.getElementById('sliderWeightResult').innerText = `Price to pay (incl. VAT): €${price.toFixed(2)}`;
+        }
+        
+        function calculateSliderCompoundInterest() {
+            const capital = parseFloat(document.getElementById('sliderCapital').value);
+            const interestRate = parseFloat(document.getElementById('sliderInterestRate').value);
+            const duration = parseInt(document.getElementById('sliderDuration').value);
+            
+            if (isNaN(capital) || isNaN(interestRate) || isNaN(duration)) {
+                document.getElementById('sliderInterestResult').innerText = "Please enter valid values";
+                return;
+            }
+            
+            // Using annual compounding for the slider version
+            const finalAmount = capital * Math.pow(1 + (interestRate / 100), duration);
+            const interest = finalAmount - capital;
+            
+            document.getElementById('sliderInterestResult').innerText = 
+                `Final Amount: €${finalAmount.toFixed(2)}\nInterest Earned: €${interest.toFixed(2)}`;
+        }
+        
+        function calculateSliderTaxableValue() {
+            const productName = document.getElementById('sliderProductName').value;
+            const productPrice = parseFloat(document.getElementById('sliderProductPrice').value);
+            const purchaseDate = new Date(document.getElementById('sliderPurchaseDate').value);
+            
+            if (isNaN(productPrice)) {
+                document.getElementById('sliderTaxResult').innerText = "Please enter a valid price";
+                return;
+            }
+            
+            const today = new Date();
+            const diffDays = Math.floor((today - purchaseDate) / (1000 * 60 * 60 * 24));
+            let depreciation = 0;
+            if (diffDays >= 365) depreciation = 0.20;
+            const taxableAmount = productPrice * (1 - depreciation);
+            
+            document.getElementById('sliderTaxResult').innerText = 
+                `Product: ${productName}\nTaxable Value: €${taxableAmount.toFixed(2)}`;
+        }
+        
+        // Slider functionality
+        let currentSlide = 0;
+        const slides = document.querySelectorAll('.slide');
+        const dots = document.querySelectorAll('.slider-dot');
+        
+        function updateSlider() {
+            const slider = document.querySelector('.slider');
+            slider.style.transform = `translateX(-${currentSlide * 100}%)`;
+            
+            dots.forEach((dot, index) => {
+                dot.classList.toggle('active', index === currentSlide);
+            });
+        }
+        
+        function goToSlide(index) {
+            currentSlide = index;
+            updateSlider();
+        }
+        
+        // Auto-advance slider
+        let slideInterval = setInterval(() => {
+            currentSlide = (currentSlide + 1) % slides.length;
+            updateSlider();
+        }, 5000);
+        
+        // Pause slider on hover
+        const sliderContainer = document.querySelector('.slider-container');
+        sliderContainer.addEventListener('mouseenter', () => {
+            clearInterval(slideInterval);
+        });
+        
+        sliderContainer.addEventListener('mouseleave', () => {
+            slideInterval = setInterval(() => {
+                currentSlide = (currentSlide + 1) % slides.length;
+                updateSlider();
+            }, 5000);
+        });
+        
+        // Language switching functionality
+        function changeLanguage() {
+            const language = document.getElementById('langSwitch').value;
+            
+            // Example translations - you would expand this with all your text elements
+            const translations = {
+                en: {
+                    title: "FinTools Pro - Financial SaaS Solution",
+                    header: "FinTools Pro",
+                    subtitle: "Your all-in-one financial calculation SaaS platform",
+                    ctaButton: "Get Started Today",
+                    sectionTitle: "Powerful Financial Tools",
+                    retailTitle: "Retail Pricing Tools",
+                    investmentTitle: "Investment Tools",
+                    taxTitle: "Tax & Compliance",
+                    pricingTitle: "Simple, Transparent Pricing",
+                    footerText: "Your complete financial toolkit in the cloud",
+                    // Add all other English translations here
+                },
+                fr: {
+                    title: "FinTools Pro - Solution Financière SaaS",
+                    header: "FinTools Pro",
+                    subtitle: "Votre plateforme SaaS de calculs financiers tout-en-un",
+                    ctaButton: "Commencer",
+                    sectionTitle: "Outils Financiers Puissants",
+                    retailTitle: "Outils de Tarification",
+                    investmentTitle: "Outils d'Investissement",
+                    taxTitle: "Fiscalité & Conformité",
+                    pricingTitle: "Tarification Simple et Transparente",
+                    footerText: "Votre boîte à outils financière complète dans le cloud",
+                    // Add all other French translations here
+                }
+            };
+            
+            // Update the page content
+            const langData = translations[language];
+            document.title = langData.title;
+            document.querySelector('header h1').textContent = langData.header;
+            document.querySelector('.subtitle').textContent = langData.subtitle;
+            document.querySelector('.cta-button').textContent = langData.ctaButton;
+            document.querySelector('.section-title').textContent = langData.sectionTitle;
+            document.querySelectorAll('.feature-title')[0].textContent = langData.retailTitle;
+            document.querySelectorAll('.feature-title')[1].textContent = langData.investmentTitle;
+            document.querySelectorAll('.feature-title')[2].textContent = langData.taxTitle;
+            document.querySelector('#pricing .section-title').textContent = langData.pricingTitle;
+            document.querySelector('footer p').textContent = langData.footerText;
+            
+            // Update all other elements similarly...
+            // You would add translations for all text elements on the page
+        }
+
+        // Initialize date fields with today's date and language based on browser preference
+        document.addEventListener('DOMContentLoaded', function() {
+            const today = new Date().toISOString().split('T')[0];
+            document.getElementById('purchaseDate').value = today;
+            document.getElementById('sliderPurchaseDate').value = today;
+            
+            const userLang = navigator.language || navigator.userLanguage; 
+            if (userLang.startsWith('fr')) {
+                document.getElementById('langSwitch').value = 'fr';
+                changeLanguage();
+            }
+        });
+    </script>
+</body>
+</html>
